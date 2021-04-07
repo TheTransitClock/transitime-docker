@@ -10,10 +10,11 @@ docker rmi transitclock-server
 
 docker build --no-cache -t transitclock-server \
 --build-arg TRANSITCLOCK_PROPERTIES="config/transitclock.properties" \
---build-arg AGENCYID="1" \
---build-arg AGENCYNAME="CAPMETRO" \
---build-arg GTFS_URL="https://data.texas.gov/download/r4v4-vz24/application/zip" \
---build-arg GTFSRTVEHICLEPOSITIONS="https://data.texas.gov/download/eiei-9rpf/application%2Foctet-stream" .
+--build-arg AGENCYID="RTEC" \
+--build-arg AGENCYNAME="RTEC" \
+--build-arg GTFS_URL="http://192.168.100.11:5000/get_gtfs_static" \
+--build-arg GTFSRTVEHICLEPOSITIONS="http://192.168.100.11:5000/get_data" .
+
 
 docker run --name transitclock-db -p 5432:5432 -e POSTGRES_PASSWORD=$PGPASSWORD -d postgres:9.6.3
 
