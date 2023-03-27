@@ -1,4 +1,4 @@
-FROM maven:3.6-jdk-8
+FROM maven:3.8.1-openjdk-17-slim
 MAINTAINER Nathan Walker <nathan@rylath.net>, Sean Óg Crudden <og.crudden@gmail.com>
 
 ARG AGENCYID="1"
@@ -18,15 +18,16 @@ ENV TRANSITCLOCK_CORE /transitclock-core
 RUN apt-get update \
 	&& apt-get install -y postgresql-client \
 	&& apt-get install -y git-core \
-	&& apt-get install -y vim
+	&& apt-get install -y vim \
+	&& apt-get install bash
 
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH
 RUN mkdir -p "$CATALINA_HOME"
 WORKDIR $CATALINA_HOME
 
-ENV TOMCAT_MAJOR 8
-ENV TOMCAT_VERSION 8.0.43
+ENV TOMCAT_MAJOR 9
+ENV TOMCAT_VERSION 9.0.73
 ENV TOMCAT_TGZ_URL https://archive.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 
 RUN set -x \
@@ -40,11 +41,11 @@ EXPOSE 8080
 
 # Install json parser so we can read API key for CreateAPIKey output
 
-RUN wget http://stedolan.github.io/jq/download/linux64/jq
+#RUN wget http://stedolan.github.io/jq/download/linux64/jq
 
-RUN chmod +x ./jq
+#RUN chmod +x ./jq
 
-RUN cp jq /usr/bin/
+#RUN cp jq /usr/bin/
 
 WORKDIR /
 RUN mkdir /usr/local/transitclock
@@ -58,11 +59,11 @@ RUN mkdir /usr/local/transitclock/test/config
 
 WORKDIR /usr/local/transitclock
 
-RUN  curl -s https://api.github.com/repos/TheTransitClock/transitime/releases/latest | jq -r ".assets[].browser_download_url" | grep 'Core.jar\|api.war\|web.war' | xargs -L1 wget
+# RUN  curl -s https://api.github.com/repos/TheTransitClock/transitime/releases/latest | jq -r ".assets[].browser_download_url" | grep 'Core.jar\|api.war\|web.war' | xargs -L1 wget
 
-#ADD transitime/transitclockWebapp/target/web.war /usr/local/transitclock/
-#ADD transitime/transitclockApi/target/api.war /usr/local/transitclock/
-#ADD transitime/transitclock/target/Core.jar /usr/local/transitclock/
+ADD transitime/transitclockWebapp/target/web.war /usr/local/transitclock/
+ADD transitime/transitclockApi/target/api.war /usr/local/transitclock/
+ADD transitime/transitclock/target/Core.jar /usr/local/transitclock/
 
 # Deploy API which talks to core using RMI calls.
 RUN mv api.war  /usr/local/tomcat/webapps
