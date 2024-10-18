@@ -4,7 +4,7 @@ Things to make transitime go:
 
 - Ubuntu
 - sudo apt-get install git
-- git clone https://github.com/scrudden/transitime-docker.git
+- git clone https://github.com/TheTransitClock/transitclockDocker.git
 - curl -sSL https://get.docker.com/ | sh  (i.e. install docker)
 - Configure agency details in the go.sh script. Here you set the agency name, agency id** (as in GTFS feed), GTFS feed location and GTFS-realtime vehicle location url.
 - ./go.sh
