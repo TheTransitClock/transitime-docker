@@ -1,5 +1,5 @@
 FROM maven:3.6-jdk-8
-MAINTAINER Nathan Walker <nathan@rylath.net>, Sean Óg Crudden <og.crudden@gmail.com>
+LABEL org.opencontainers.image.authors="Nathan Walker <nathan@rylath.net>, Sean Óg Crudden <og.crudden@gmail.com>"
 
 ARG AGENCYID="1"
 ARG AGENCYNAME="GOHART"
@@ -40,7 +40,8 @@ EXPOSE 8080
 
 # Install json parser so we can read API key for CreateAPIKey output
 
-RUN wget http://stedolan.github.io/jq/download/linux64/jq
+RUN wget https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64
+RUN mv ./jq-linux-amd64 ./jq
 
 RUN chmod +x ./jq
 
@@ -105,4 +106,4 @@ ADD config/test/* /usr/local/transitclock/config/test/
 
 EXPOSE 8080
 
-CMD ["/start_transitclock.sh"]
+CMD ["./bin/start_transitclock.sh"]
